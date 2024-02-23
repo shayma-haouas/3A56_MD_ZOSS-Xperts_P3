@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo ;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReclamationRepository::class)]
 class Reclamation
@@ -20,10 +22,22 @@ class Reclamation
     private ?string $type = null;
 
     #[ORM\Column(length: 255)]
+    
+    #[Assert\NotBlank(message: 'Reponse ne doit pas être vide.')]
+        #[Assert\Length(
+            min: 5,
+            minMessage: 'Il faut inserer au moins {{ limit }} characteres',
+        )]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $date_rec = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    
+    #[Gedmo\Timestampable(on: "create")]
+    private ?\DateTimeInterface $dateajout = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+
+    #[Gedmo\Timestampable(on: "update")]
+    private ?\DateTimeInterface $datemodif = null;
 
     #[ORM\ManyToOne(inversedBy: 'reclamations')]
     private ?User $User = null;
@@ -31,9 +45,13 @@ class Reclamation
     #[ORM\OneToMany(mappedBy: 'Reclamation', targetEntity: Reponse::class)]
     private Collection $reponses;
 
+    #[ORM\OneToMany(mappedBy: 'reclamation', targetEntity: Reponse::class)]
+    private Collection $reponse;
+
     public function __construct()
     {
         $this->reponses = new ArrayCollection();
+        $this->reponse = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -65,14 +83,25 @@ class Reclamation
         return $this;
     }
 
-    public function getDateRec(): ?\DateTimeInterface
+    public function getDateajout(): ?\DateTimeInterface
     {
-        return $this->date_rec;
+        return $this->dateajout;
     }
 
-    public function setDateRec(\DateTimeInterface $date_rec): static
+    public function setDateajout(\DateTimeInterface $dateajout): static
     {
-        $this->date_rec = $date_rec;
+        $this->dateajout = $dateajout;
+
+        return $this;
+    }
+    public function getDatemodif(): ?\DateTimeInterface
+    {
+        return $this->datemodif;
+    }
+
+    public function setDatemodif(\DateTimeInterface $datemodif): static
+    {
+        $this->datemodif = $datemodif;
 
         return $this;
     }
@@ -117,5 +146,13 @@ class Reclamation
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Reponse>
+     */
+    public function getReponse(): Collection
+    {
+        return $this->reponse;
     }
 }

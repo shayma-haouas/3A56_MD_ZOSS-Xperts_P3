@@ -45,4 +45,13 @@ class ReponseRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function findResponsesByReclamationId(int $reclamationId)
+{
+    return $this->createQueryBuilder('r')
+        ->join('r.Reclamation', 'rec')
+        ->andWhere('rec.id = :reclamationId')
+        ->setParameter('reclamationId', $reclamationId)
+        ->getQuery()
+        ->getResult();
+}
 }

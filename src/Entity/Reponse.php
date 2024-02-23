@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ReponseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo ;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReponseRepository::class)]
 class Reponse
@@ -15,12 +17,24 @@ class Reponse
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Describtion ne doit pas être vide.')]
+    #[Assert\Length(
+        min: 5,
+        minMessage: 'Il faut inserer au moins {{ limit }} characteres',
+    )]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $date_rep = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    
+    #[Gedmo\Timestampable(on: "create")]
+    private ?\DateTimeInterface $dateajout = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+
+    #[Gedmo\Timestampable(on: "update")]
+    private ?\DateTimeInterface $datemodif = null;
 
     #[ORM\ManyToOne(inversedBy: 'reponses')]
+    #[ORM\JoinColumn(name: 'reclamation_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?Reclamation $Reclamation = null;
 
     public function getId(): ?int
@@ -40,14 +54,25 @@ class Reponse
         return $this;
     }
 
-    public function getDateRep(): ?\DateTimeInterface
+    public function getDateajout(): ?\DateTimeInterface
     {
-        return $this->date_rep;
+        return $this->dateajout;
     }
 
-    public function setDateRep(\DateTimeInterface $date_rep): static
+    public function setDateajout(\DateTimeInterface $dateajout): static
     {
-        $this->date_rep = $date_rep;
+        $this->dateajout = $dateajout;
+
+        return $this;
+    }
+    public function getDatemodif(): ?\DateTimeInterface
+    {
+        return $this->datemodif;
+    }
+
+    public function setDatemodif(\DateTimeInterface $datemodif): static
+    {
+        $this->datemodif = $datemodif;
 
         return $this;
     }

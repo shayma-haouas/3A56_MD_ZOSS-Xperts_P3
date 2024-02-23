@@ -45,4 +45,15 @@ class ReclamationRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function findByUserId(int $id): array
+{
+    $qb = $this->createQueryBuilder('c')
+        ->where('c.User= :id')
+        ->setParameter('id', $id)
+        ->getQuery();
+
+    return $qb->getResult();
+}
+
+
 }

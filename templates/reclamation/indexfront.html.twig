@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reclamation {% endblock %}
+
+{% block body %}
+    <h1>Liste des reclamations</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Dateajout</th>
+                <th>Datemodif</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reclamation in reclamations %}
+            <tr>
+                <td>{{ reclamation.type }}</td>
+                <td>{{ reclamation.description }}</td>
+                <td>{{ reclamation.dateajout ? reclamation.dateajout|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ reclamation.datemodif ? reclamation.datemodif|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}">Detail</a>
+                    <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Aucun reclamation trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reclamation_new') }}">Ajouter une reclamation</a>
+{% endblock %}
