@@ -1,0 +1,51 @@
+
+{% extends 'back/Base-back.html.twig' %}
+
+{% block back %}
+{% block title %}Liste des Dechets{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center text-primary">Dechets Index</h1>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover shadow">
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th>Id</th>
+                    <th>Type</th>
+                    <th>Date Entre</th>
+                    <th>Quantite</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dechet in dechets %}
+                    <tr>
+                        <td>{{ dechet.id }}</td>
+                        <td>{{ dechet.type }}</td>
+                        <td>{{ dechet.dateEntre ? dechet.dateEntre|date('Y-m-d') : '' }}</td>
+                        <td>{{ dechet.quantite }}</td>
+                        <td>{{ dechet.description }}</td>
+                        <td>
+                            <a href="{{ path('app_dechets_show', {'id': dechet.id}) }}" class="btn btn-info btn-sm">Show</a>
+                            <a href="{{ path('app_dechets_edit', {'id': dechet.id}) }}" class="btn btn-primary btn-sm">Edit</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">No records found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-center">
+        <a href="{{ path('app_dechets_new') }}" class="btn btn-success">Create New</a>
+    </div>
+</div>
+{% endblock %}
+
+{% endblock %}
