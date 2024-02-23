@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\FactureDon;
 use App\Form\FactureDonType;
-use App\Repository\DonRepository;
 use App\Repository\FactureDonRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -52,9 +51,8 @@ class FactureDonController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_facture_don_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, FactureDon $factureDon, EntityManagerInterface $entityManager,DonRepository $d): Response
+    public function edit(Request $request, FactureDon $factureDon, EntityManagerInterface $entityManager): Response
     {
-        $dons=$d->findAll();
         $form = $this->createForm(FactureDonType::class, $factureDon);
         $form->handleRequest($request);
 
