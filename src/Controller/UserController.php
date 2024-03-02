@@ -7,6 +7,7 @@ use App\Form\UsernewType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,15 +18,39 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserController extends AbstractController
 {
     #[Route('/user', name: 'app_user')]
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository,PaginatorInterface $paginator, Request $request): Response
     {
         // Utiliser dump() pour afficher les données des utilisateurs dans le terminal
         dump($userRepository->findAll());
+         // Récupérez l'utilisateur connecté
+         $user = $this->getUser();
+
+    $queryBuilder = $userRepository->createQueryBuilder('a')
+        ->orderBy('a.name', 'DESC');
+
+    $searchTerm = $request->query->get('q');
+    if ($searchTerm) {
+        $queryBuilder
+            ->where('a.name LIKE :term')
+            ->setParameter('term', '%' . $searchTerm . '%');
+    }
+
+    $query = $queryBuilder->getQuery();
+
+    $user = $paginator->paginate(
+        $query,
+        $request->query->getInt('page', 1),
+        2
+    );
 
         // Passer les données des utilisateurs à la vue
         return $this->render('user/base.html.twig', [
+            'user' => $user,
             'users' => $userRepository->findAll(),
         ]);
+     
+   
+
     }
 
 
@@ -64,6 +89,7 @@ class UserController extends AbstractController
             'user' => $user, 
             'form' => $form->createView(),
         ]);
+
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]

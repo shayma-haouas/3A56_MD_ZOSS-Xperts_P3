@@ -9,7 +9,9 @@
     <h1 style="color:#433e5b">Register</h1>
     <hr class="si" >
     
-   {{ form_start(registrationForm, {'id': 'registration-form'}) }}
+  
+   {{ form_start(registrationForm, {attr: {novalidate: 'novalidate'}}) }}
+
 
     <div class="form-group mb-3">
         {{ form_widget(registrationForm.name, {'attr': {'class': 'form-control', 'placeholder': 'Name'}}) }}
@@ -37,6 +39,9 @@
         {{ form_widget(registrationForm.roles, {'attr': {'class': 'form-control'}}) }}
         {{ form_errors(registrationForm.roles) }}
     </div>
+ <img class="img-fluid" src="{{ asset('uploads/' ~ registrationForm.image.vars.value) }}" alt="nameevent" style="width: 300px; height: 400px;">
+
+                   
    
     <button type="submit" class="btn btn-primary btn-block mb-4" style="background-color:#70952b ; border-color:#70952b">Sign up</button>
     {{ form_end(registrationForm) }}

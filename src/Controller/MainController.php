@@ -14,5 +14,7 @@ class MainController extends AbstractController
         return $this->render('front/Base-front.html.twig', [
             'controller_name' => 'MainController',
         ]);
+        
     }
+    
 }

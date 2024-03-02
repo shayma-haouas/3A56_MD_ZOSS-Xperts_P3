@@ -18,6 +18,7 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class AppAuthenticator extends AbstractLoginFormAuthenticator
 {
+    
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'app_login';
@@ -49,10 +50,16 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
+        $user = $token->getUser();
         // For example:
-         return new RedirectResponse($this->urlGenerator->generate('app_admin'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+       // For example:
+       if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+        return new RedirectResponse($this->urlGenerator->generate('app_back'));
     }
+
+    return new RedirectResponse($this->urlGenerator->generate('app_main'));
+}
+    
 
     protected function getLoginUrl(Request $request): string
     {

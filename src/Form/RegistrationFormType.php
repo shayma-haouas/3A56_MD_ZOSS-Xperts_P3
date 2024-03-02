@@ -11,6 +11,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class RegistrationFormType extends AbstractType
 {
@@ -62,6 +64,21 @@ class RegistrationFormType extends AbstractType
                 'placeholder' => false, //
             
             ])
+            ->add('image',FileType::class,['data_class' => NULL, "required" => false, 'constraints' => [
+                new File([
+                    'maxSize' => '9000k',
+                    'mimeTypes' => [
+                        'image/jpg',
+                        'image/png',
+                        'image/jpeg',
+                        'image/JPEG',
+                        'image/JPG',
+                        'image/PNG',
+
+                    ],
+                    'mimeTypesMessage' => 'Please upload a valid image',
+                ])
+            ]])
 
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,

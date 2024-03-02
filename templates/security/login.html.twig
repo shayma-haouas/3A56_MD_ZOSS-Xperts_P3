@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!--[if lt IE 7]> <html lang="en" class="ie6 ielt8"> <![endif]-->
 <!--[if IE 7]>    <html lang="en" class="ie7 ielt8"> <![endif]-->
@@ -5,13 +6,13 @@
 <!--[if (gte IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
-    <title>Paper Stack</title>
+    <title>Floreo</title>
     <link rel="stylesheet" type="text/css" href="Back/style.css" />
 </head>
-<body>
+<body style="background-image: url('{{ asset('Front/img/auth.jpg') }}');">
 
 <div class="container">
-    <section id="content">
+    <section id="content"  >
 
         <form method="post" action="{{ path('app_login') }}">
             <h1>Login Form</h1>
@@ -28,11 +29,11 @@
 
                
             {% endblock %}
-            <div>
-                <input type="submit" value="Log in"/>
-                <a href="#">Lost your password?</a>
-                <a href="/back">Register</a>
-            </div>
+             <a> <button type="submit" class="btn btn-primary btn-block mb-4" style="background-color:#fffff ; border-color:#70952b  " >Login In</button></a>
+        
+                <a href="/forgot">Lost your password?</a>
+                <a href="/register">Register</a>
+              
         </form><!-- form -->
 
     </section><!-- content -->

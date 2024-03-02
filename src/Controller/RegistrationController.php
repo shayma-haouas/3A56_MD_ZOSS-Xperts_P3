@@ -17,6 +17,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -28,8 +31,8 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
-    {
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, SluggerInterface $slugger,UserAuthenticatorInterface $userAuthenticator, AppAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    {   
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -55,7 +58,31 @@ class RegistrationController extends AbstractController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
-  
+            $brochureFile = $form->get('image')->getData();
+
+            // Process the uploaded file if it exists
+            if ($brochureFile instanceof UploadedFile) {
+                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // Sanitize the filename to ensure safe URL usage
+                $safeFilename = $slugger->slug($originalFilename);
+                // Generate a unique filename to prevent conflicts
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+     
+                // Move the uploaded file to the desired directory
+                try {
+                    $brochureFile->move(
+                        $this->getParameter('Evenement_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Handle any exceptions that occur during file upload
+                    // For example, you could log the error or show a flash message
+                    // and redirect the user back to the form
+                }
+     
+                // Set the filename in your entity
+                $user->setImage($newFilename);
+            }
 
             return $userAuthenticator->authenticateUser(
                 $user,
