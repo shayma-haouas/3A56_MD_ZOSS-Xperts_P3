@@ -25,23 +25,6 @@ class UserController extends AbstractController
          // Récupérez l'utilisateur connecté
          $user = $this->getUser();
 
-    $queryBuilder = $userRepository->createQueryBuilder('a')
-        ->orderBy('a.name', 'DESC');
-
-    $searchTerm = $request->query->get('q');
-    if ($searchTerm) {
-        $queryBuilder
-            ->where('a.name LIKE :term')
-            ->setParameter('term', '%' . $searchTerm . '%');
-    }
-
-    $query = $queryBuilder->getQuery();
-
-    $user = $paginator->paginate(
-        $query,
-        $request->query->getInt('page', 1),
-        2
-    );
 
         // Passer les données des utilisateurs à la vue
         return $this->render('user/base.html.twig', [
@@ -95,27 +78,68 @@ class UserController extends AbstractController
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        
         $user = new User();
-        $form = $this->createForm(UsernewType::class, $user); 
+        $form = $this->createForm(UsernewType::class, $user);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
+            // Gérer le téléchargement de l'image de l'utilisateur
+            $imageFile = $form->get('image')->getData();
+    
+            if ($imageFile) {
+                // Gérer le stockage de l'image, par exemple :
+                $fileName = md5(uniqid()) . '.' . $imageFile->guessExtension();
+                $imageFile->move(
+                    $this->getParameter('images_directory'),
+                    $fileName
+                );
+    
+                // Associer le nom du fichier d'image à l'utilisateur
+                $user->setImage($fileName);
+            }
+    
+            // Encoder le mot de passe de l'utilisateur
             $user->setPassword($passwordEncoder->encodePassword($user, $user->getPassword()));
-            $entityManager->persist($user); 
+    
+            // Enregistrer l'utilisateur en base de données
+            $entityManager->persist($user);
             $entityManager->flush();
-
-        
+    
+            // Rediriger vers la liste des utilisateurs avec un message flash
             $this->addFlash('success', 'User successfully added!');
-
-            
-            return $this->redirectToRoute('app_user', [], Response::HTTP_SEE_OTHER); 
+            return $this->redirectToRoute('app_user');
         }
-
+    
         // Rendre le formulaire et la vue associée
-        return $this->renderForm('user/newuser.html.twig', [
+        return $this->render('user/newuser.html.twig', [
             'user' => $user,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
+    
+
+#[Route("/stat",name:"stat")]
+
+public function statistique1(UserRepository $userRepository)
+{
+    // Récupérer le nombre d'utilisateurs pour chaque rôle
+    $rolesCount = $userRepository->countUsersByRole();
+
+    // Initialiser des tableaux pour stocker les données
+    $roles = [];
+    $usersCount = [];
+
+    // Parcourir les résultats pour extraire les données
+    foreach ($rolesCount as $roleCount) {
+        $roles[] = $roleCount['role'];
+        $usersCount[] = $roleCount['count'];
+    }
+
+    // Passer les données à la vue
+    return $this->render('user/statistique.html.twig', [
+        'roles' => json_encode($roles),
+        'usersCount' => json_encode($usersCount),
+    ]);
+}
+
 }

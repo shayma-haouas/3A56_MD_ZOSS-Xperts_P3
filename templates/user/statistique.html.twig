@@ -1,0 +1,63 @@
+{% extends 'back/Base-back.html.twig' %}
+
+{% block title %}Statistiques Utilisateurs{% endblock %}
+
+{% block body%}
+    <div class="container" style="margin-left: 250px;"> <!-- Ajuster la marge à gauche selon vos besoins -->
+        <h1 class="text-center">Statistic Users</h1>
+        
+        <canvas id="usersByRoleChart"  width="400" height="100"></canvas>
+    </div>
+
+    {% block javascripts %}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Fonction pour générer les couleurs du dégradé en fonction du nombre de rôles
+            function generateGradientColors(count) {
+                var startColor = [136, 180, 78]; // Couleur de départ du dégradé (vert)
+                var endColor = [255, 99, 132];   // Couleur de fin du dégradé (rouge)
+
+                var step = 1 / count; // Pas du dégradé
+                var colors = [];
+
+                for (var i = 0; i < count; i++) {
+                    var r = Math.round(startColor[0] + (endColor[0] - startColor[0]) * (step * i));
+                    var g = Math.round(startColor[1] + (endColor[1] - startColor[1]) * (step * i));
+                    var b = Math.round(startColor[2] + (endColor[2] - startColor[2]) * (step * i));
+                    var color = 'rgba(' + r + ',' + g + ',' + b + ', 0.6)'; // Opacité fixe à 0.6
+                    colors.push(color);
+                }
+
+                return colors;
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                var ctx = document.getElementById('usersByRoleChart').getContext('2d');
+                var usersByRoleChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: {{ roles|raw }},
+                        datasets: [{
+                            label: 'Nombre d\'utilisateurs par rôle',
+                            data: {{ usersCount|raw }},
+                            backgroundColor: generateGradientColors({{ usersCount|length }}), // Utilisation de la fonction de génération des couleurs
+                            borderWidth: 0 // Supprime les bordures des barres
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // Supprime la légende du graphique
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+    {% endblock %}
+{% endblock %}

@@ -20294,7 +20294,6 @@ pre[class*=language-]:before {
 
 .pcoded-header .m-header .logo-dark,
     .pcoded-header .m-header .logo-thumb {
-   
     display: none;
 }
 
@@ -27724,12 +27723,10 @@ text.highcharts-drilldown-data-label {
     position: relative;
     padding: 15px;
     z-index: 5;
-    
 }
 
 .auth-wrapper .auth-content:not(.container) {
     width: 400px;
-    
 }
 
 .auth-wrapper .auth-content:not(.container) .card-body {

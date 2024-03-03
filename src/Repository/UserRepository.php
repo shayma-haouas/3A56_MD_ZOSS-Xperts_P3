@@ -72,6 +72,27 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function countUsersByRole()
+{
+    $result = $this->createQueryBuilder('u')
+        ->select('u.roles as role, COUNT(u.id) as countt')
+        ->groupBy('u.roles')
+        ->getQuery()
+        ->getResult();
+
+    // Transformer le résultat pour avoir une clé 'count' dans chaque élément du tableau
+    $transformedResult = [];
+    foreach ($result as $item) {
+        $transformedResult[] = [
+            'role' => $item['role'],
+            'count' => $item['countt']
+        ];
+    }
+
+    return $transformedResult;
+}
+
+
 }
 // src/Repository/UserRepository.php
 

@@ -55,7 +55,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      private  $reset_token =null;
  
      #[ORM\Column(name:"image", type:"string", length:300, nullable:false)]
-     #[Groups ("post:read")]
     
     private  $image;
 
@@ -207,6 +206,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->reset_token = $reset_token;
     }
+    
+    #[ORM\Column(name: "datenaissance", type: "date", nullable: false)]
+    #[Groups("post:read")]
+    private \DateTimeInterface $datenaissance;
 
     public function getImage(): ?string
     {
@@ -219,4 +222,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    public function getDatenaissance(): ?\DateTimeInterface
+{
+    return $this->datenaissance;
+}
+
+public function setDatenaissance(\DateTimeInterface $datenaissance): self
+{
+    $this->datenaissance = $datenaissance;
+
+    return $this;
+}
 }

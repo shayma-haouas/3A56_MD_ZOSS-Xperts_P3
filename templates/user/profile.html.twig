@@ -40,58 +40,69 @@
                             <div class="col-lg-7">
                                 <form class="p-3" id="contact-form" method="post">
                                     <div class="card-header px-4 py-sm-5 py-3">
-                                        <h2>Say Hi!</h2>
-                                        <p class="lead"> Plus d'informations </p>
-                                    </div>
-                                    <div class="card-body pt-1">
-                                        <div class="row">
-                                            <div class="col-md-12 pe-2 mb-3">
-                                                <div class="input-group input-group-static mb-4">
-                                                    <label style="color:#7b197d">Mon nom est  {{ user.name }}  </label>
-                                            
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12 pe-2 mb-3">
-                                                <div class="input-group input-group-static mb-4">
-                                                    <label style="color:#7b197d">Mon prenom est  {{ user.lastname }}    </label>
-                                         
-                                                </div>
-                                            </div>
-                                             <div class="col-md-12 pe-2 mb-3">
-                                                <div class="input-group input-group-static mb-4">
-                                                    <label style="color:#7b197d">Mon etat de compte est Active </label>
-                                                 
-                                                </div>
-                                            </div>
-                                            <div>
-                                              <div  style=" width:100px ;height:100px;background-image: url('{{ asset('uploads/' ~ user.image) }}')" loading="lazy">
-</div>
-                                          
-                                            <div class="col-md-12 pe-2 mb-3">
-                                                <div class="input-group input-group-static mb-4" style="color:#7b197d">
-                                                     {% if user.roles is iterable %}
-            <ul>
-                {% for role in user.roles %}
-                    <li>{{ role }}</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <span>{{ user.roles }}</span>
-        {% endif %}
-                                                  
-                                                </div>
-                                                
-                                            </div>
-                                           
-                                        </div>
-
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                                <form class="p-3" id="contact-form" method="post">
+    <div class="card-header px-4 py-sm-5 py-3">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Say Hi!</h2>
+                <p class="lead">Plus d'informations</p>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group input-group-static mb-4" style="color:#7b197d">
+                    {% if user.image %}
+                        <div style="width: 150px; height: 150px; background-image: url('{{ asset('uploads/' ~ user.image) }}'); background-size: cover; background-position: center;" loading="lazy"></div>
+                    {% else %}
+                        <div style="width: 150px; height: 150px; background-color: #f0f0f0;"></div>
+                    {% endif %}
                 </div>
             </div>
+        </div>
+    </div>
+</form>
+                                    </div>
+                                    <div class="card-body pt-1">
+<div class="row">
+    <div class="col-md-12 pe-2 mb-3">
+        <div class="input-group input-group-static mb-4">
+            <label ><h1 style="color:#7b197d">Name:</h1 >  {{ user.name }}</label>
+        </div>
+    </div>
+</div>
+ 
+    <div class="row">
+        <div class="col-md-12 pe-2 mb-3">
+            <div class="input-group input-group-static mb-4">
+                <label><h1 style="color:#7b197d">Last Name:</h1>{{ user.lastname }}</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 pe-2 mb-3">
+            <div class="input-group input-group-static mb-4">
+                <label><h1 style="color:#7b197d">Acount State:</h1>Active</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 pe-2 mb-3">
+            <div class="input-group input-group-static mb-4">
+                <label><h1 style="color:#7b197d">Roles:</h1>
+                {% if user.roles is iterable %}
+                    <ul>
+                        {% for role in user.roles %}
+                            {{ role }}
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <span>{{ user.roles }}</span>
+                {% endif %}
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
                  {% endif %}
         </div>
     </section>
