@@ -91,6 +91,26 @@ public function countUsersByRole()
 
     return $transformedResult;
 }
+public function countByAge()
+{
+    $users = $this->createQueryBuilder('u')
+        ->select('u')
+        ->getQuery()
+        ->getResult();
+
+    $ageCount = [];
+    foreach ($users as $user) {
+        $age = $user->getDatenaissance()->diff(new \DateTime())->y;
+        if (!isset($ageCount[$age])) {
+            $ageCount[$age] = 1;
+        } else {
+            $ageCount[$age]++;
+        }
+    }
+
+    return $ageCount;
+}
+
 
 
 }

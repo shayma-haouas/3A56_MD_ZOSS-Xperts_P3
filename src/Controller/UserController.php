@@ -118,28 +118,44 @@ class UserController extends AbstractController
     }
     
 
-#[Route("/stat",name:"stat")]
 
-public function statistique1(UserRepository $userRepository)
-{
-    // Récupérer le nombre d'utilisateurs pour chaque rôle
-    $rolesCount = $userRepository->countUsersByRole();
-
-    // Initialiser des tableaux pour stocker les données
-    $roles = [];
-    $usersCount = [];
-
-    // Parcourir les résultats pour extraire les données
-    foreach ($rolesCount as $roleCount) {
-        $roles[] = $roleCount['role'];
-        $usersCount[] = $roleCount['count'];
+    #[Route("/stat", name: "stat")]
+    public function statistique1(UserRepository $userRepository)
+    {
+        // Récupérer le nombre d'utilisateurs pour chaque rôle
+        $rolesCount = $userRepository->countUsersByRole();
+    
+        // Récupérer le nombre d'utilisateurs pour chaque tranche d'âge
+        $ageCounts = $userRepository->countByAge();
+    
+        // Initialiser des tableaux pour stocker les données
+        $roles = [];
+        $usersCount = [];
+        $ageGroups = [];
+        $userCounts = [];
+    
+        // Parcourir les résultats pour extraire les données sur les rôles
+        foreach ($rolesCount as $roleCount) {
+            $roles[] = $roleCount['role'];
+            $usersCount[] = $roleCount['count'];
+        }
+    
+        // Parcourir les résultats pour extraire les données sur les tranches d'âge
+        foreach ($ageCounts as $age => $count) {
+            $ageGroups[] = $age;
+            $userCounts[] = $count;
+        }
+    
+        // Passer les données à la vue
+        return $this->render('user/statistique.html.twig', [
+            'roles' => $roles,
+            'usersCount' => $usersCount,
+            'ageGroups' => $ageGroups,
+            'userCounts' => $userCounts,
+        ]);
     }
-
-    // Passer les données à la vue
-    return $this->render('user/statistique.html.twig', [
-        'roles' => json_encode($roles),
-        'usersCount' => json_encode($usersCount),
-    ]);
-}
+    
+    
+    
 
 }
