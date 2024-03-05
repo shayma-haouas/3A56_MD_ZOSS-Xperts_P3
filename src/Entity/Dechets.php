@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DechetsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,8 +28,15 @@ class Dechets
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'dechets')]
-    private ?Evenement $Evenement = null;
+    #[ORM\OneToMany(mappedBy: 'Dechets', targetEntity: ReservationDechets::class)]
+    private Collection $reservationDechets;
+
+    public function __construct()
+    {
+        $this->reservationDechets = new ArrayCollection();
+    }
+
+ 
 
     
 
@@ -84,17 +93,39 @@ class Dechets
         return $this;
     }
 
-    public function getEvenement(): ?Evenement
+    /**
+     * @return Collection<int, ReservationDechets>
+     */
+    public function getReservationDechets(): Collection
     {
-        return $this->Evenement;
+        return $this->reservationDechets;
     }
 
-    public function setEvenement(?Evenement $Evenement): static
+    public function addReservationDechet(ReservationDechets $reservationDechet): static
     {
-        $this->Evenement = $Evenement;
+        if (!$this->reservationDechets->contains($reservationDechet)) {
+            $this->reservationDechets->add($reservationDechet);
+            $reservationDechet->setDechets($this);
+        }
 
         return $this;
     }
+
+    public function removeReservationDechet(ReservationDechets $reservationDechet): static
+    {
+        if ($this->reservationDechets->removeElement($reservationDechet)) {
+            // set the owning side to null (unless already changed)
+            if ($reservationDechet->getDechets() === $this) {
+                $reservationDechet->setDechets(null);
+            }
+        }
+
+        return $this;
+    }
+
+   
+
+  
 
  
     

@@ -6,7 +6,7 @@ use App\Repository\SponsorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: SponsorRepository::class)]
 class Sponsor
 {
@@ -16,12 +16,19 @@ class Sponsor
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"Sponsor name cannot be empty")]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"email field can't be empty")]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Number must not be blank")]
+#[Assert\Regex(
+    pattern: "/^[0-9]+$/",
+    message: "Number must contain only digits"
+)]
     private ?int $number = null;
 
     #[ORM\OneToMany(mappedBy: 'Sponsor', targetEntity: Evenement::class)]
@@ -80,7 +87,11 @@ class Sponsor
     {
         return $this->evenements;
     }
-
+ 
+    public function __toString()
+    {
+        return(string)$this->getName();
+    }
     public function addEvenement(Evenement $evenement): static
     {
         if (!$this->evenements->contains($evenement)) {

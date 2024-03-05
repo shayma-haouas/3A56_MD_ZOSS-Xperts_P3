@@ -11,7 +11,7 @@ class EventController extends AbstractController
     #[Route('/event', name: 'app_event')]
     public function index(): Response
     {
-        return $this->render('front/event.html.twig', [
+        return $this->render('front/eventafficher.html.twig', [
             'controller_name' => 'EventController',
         ]);
     }

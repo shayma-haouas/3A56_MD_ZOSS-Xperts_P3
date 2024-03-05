@@ -32,6 +32,9 @@ class ReservationDechets
     #[ORM\ManyToOne(inversedBy: 'reservationDechets')]
     private ?User $User = null;
 
+    #[ORM\ManyToOne(inversedBy: 'reservationDechets')]
+    private ?Dechets $Dechets = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +108,18 @@ class ReservationDechets
     public function setUser(?User $User): static
     {
         $this->User = $User;
+
+        return $this;
+    }
+
+    public function getDechets(): ?Dechets
+    {
+        return $this->Dechets;
+    }
+
+    public function setDechets(?Dechets $Dechets): static
+    {
+        $this->Dechets = $Dechets;
 
         return $this;
     }

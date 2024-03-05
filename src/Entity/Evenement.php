@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
 class Evenement
@@ -17,9 +19,25 @@ class Evenement
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nameevent = null;
+    #[Assert\NotBlank(message:"Name event must not be empty")]
+   
+    #[Assert\Regex(
+          pattern:"/^[^0-9]+$/",
+          message:"name can only contain letters"
+      )]
+      private ?string $nameevent = null;
+
+    
+      
+    
+   
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"Type of event cant be empty")]
+    #[Assert\Regex(
+        pattern:"/^[^0-9]+$/",
+        message:"Type can only contain letters"
+    )]
     private ?string $type = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -29,12 +47,17 @@ class Evenement
     private ?\DateTimeInterface $datefin = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"Description of event cant be empty")]
+    #[Assert\Length(min:10,max:1000, minMessage:"Description needs to be> 10.", maxMessage:"Description needs to be <=1000")]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:"Number of participant must be filled")]
+    
     private ?int $nbparticipant = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"place is required")]
     private ?string $lieu = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -43,8 +66,7 @@ class Evenement
     #[ORM\ManyToOne(inversedBy: 'evenements')]
     private ?Sponsor $Sponsor = null;
 
-    #[ORM\OneToMany(mappedBy: 'Evenement', targetEntity: Dechets::class)]
-    private Collection $dechets;
+  
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'evenements')]
     private Collection $User;
@@ -54,7 +76,7 @@ class Evenement
 
     public function __construct()
     {
-        $this->dechets = new ArrayCollection();
+        
         $this->User = new ArrayCollection();
     }
 
@@ -146,7 +168,7 @@ class Evenement
 
         return $this;
     }
-
+   
     public function getImage(): ?string
     {
         return $this->image;
@@ -171,35 +193,11 @@ class Evenement
         return $this;
     }
 
-    /**
-     * @return Collection<int, Dechets>
-     */
-    public function getDechets(): Collection
-    {
-        return $this->dechets;
-    }
+   
 
-    public function addDechet(Dechets $dechet): static
-    {
-        if (!$this->dechets->contains($dechet)) {
-            $this->dechets->add($dechet);
-            $dechet->setEvenement($this);
-        }
+   
 
-        return $this;
-    }
-
-    public function removeDechet(Dechets $dechet): static
-    {
-        if ($this->dechets->removeElement($dechet)) {
-            // set the owning side to null (unless already changed)
-            if ($dechet->getEvenement() === $this) {
-                $dechet->setEvenement(null);
-            }
-        }
-
-        return $this;
-    }
+   
 
     /**
      * @return Collection<int, User>
