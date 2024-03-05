@@ -3,8 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\ProduitRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
 class Produit
@@ -29,8 +30,8 @@ class Produit
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
-    #[ORM\ManyToOne(inversedBy: 'produits')]
-    private ?Commande $commande = null;
+    #[ORM\OneToMany(mappedBy: 'produit', targetEntity: Commande::class)]
+    private ?Collection $commandes = null;
 
     public function getId(): ?int
     {
@@ -97,15 +98,39 @@ class Produit
         return $this;
     }
 
-    public function getCommande(): ?Commande
+    /**
+     * @return Collection<int, Commande>
+     */
+    public function getCommandes(): Collection
     {
-        return $this->commande;
+        return $this->commandes;
     }
 
-    public function setCommande(?Commande $commande): self
+    public function addCommande(Commande $commande): static
     {
-        $this->commande = $commande;
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes->add($commande);
+            $commande->setProduit($this);
+        }
 
         return $this;
     }
+
+    public function removeCommande(Commande $commande): static
+    {
+        if ($this->commandes->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getProduit() === $this) {
+                $commande->setProduit(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+{
+    return $this->nomp ?? '';
+}
+
 }

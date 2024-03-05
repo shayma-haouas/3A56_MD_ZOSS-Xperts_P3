@@ -8,11 +8,7 @@
                 <div class="card-body p-5">
                     <h2 class="card-title text-center mb-4">Commande Form</h2>
                     {{ form_start(form, {'attr': {'class': 'my-form-class'}}) }}
-                        <div class="mb-3">
-                            {{ form_label(form.montant, 'Montant', {'label_attr': {'class': 'form-label'}}) }}
-                            {{ form_widget(form.montant, {'attr': {'class': 'form-control', 'placeholder': 'Enter Montant'}}) }}
-                            {{ form_errors(form.montant) }}
-                        </div>
+                      
                         <div class="mb-3">
                             {{ form_label(form.datecmd, 'Date Commande', {'label_attr': {'class': 'form-label'}}) }}
                             {{ form_widget(form.datecmd, {'attr': {'class': 'form-control', 'placeholder': 'Select Date'}}) }}

@@ -1,13 +1,8 @@
-{% extends 'back/Base-back.html.twig' %}
+{% extends 'base.html.twig' %}
 {% block com %}
 {% block title %}Commande{% endblock %}
 
 {% block body %}
-<br>
-<a href="{{ path('pdfDhia') }}" style="text-decoration: none; color: #28a745; margin-right: 10px; display: inline-block; text-align: center;">
-    <i class="fas fa-file-pdf fa-lg" style="margin-right: 5px;"></i> Reçus
-</a>
-
     <div style="margin: 20px;">
         <h1 style="color: #333; font-size: 24px; margin-bottom: 20px; text-align: center;">Commande</h1>
 
@@ -47,8 +42,6 @@
             </table>
 
             <a href="{{ path('app_commande_edit', {'id': commande.id}) }}" style="text-decoration: none; color: #007bff; margin-right: 10px; display: block; text-align: center;">Edit</a>
-            <a class="btn btn-sm btn-primary" href="{{ path('sms') }}">Envoyer un SMS</a>
-
         {% endfor %}
 
     </div>

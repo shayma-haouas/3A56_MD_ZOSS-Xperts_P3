@@ -36,7 +36,7 @@ class ProduitType extends AbstractType
             ],
         ])
         ->add('image')
-        ->add('commande')
+        
         ;
     }
 

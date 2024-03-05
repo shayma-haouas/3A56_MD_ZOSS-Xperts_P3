@@ -359,11 +359,7 @@
                             {{ form_widget(form.image, {'attr': {'class': 'form-control', 'placeholder': 'Choose Image'}}) }}
                             {{ form_errors(form.image) }}
                         </div>
-                        <div class="mb-3">
-                            {{ form_label(form.commande, 'Commande', {'label_attr': {'class': 'form-label'}}) }}
-                            {{ form_widget(form.commande, {'attr': {'class': 'form-control', 'placeholder': 'Enter Commande'}}) }}
-                            {{ form_errors(form.commande) }}
-                        </div>
+                     
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
                         </div>

@@ -57,7 +57,7 @@
                     <div class="navbar-nav ms-auto">
                         <a href="/main" class="nav-item nav-link active">Home</a>
                         <a href="/about" class="nav-item nav-link">About</a>
-                        <a href="/product" class="nav-item nav-link">Products</a>
+                        <a href="/produit" class="nav-item nav-link">Products</a>
                         <a href="/event" class="nav-item nav-link">Events</a>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
@@ -84,7 +84,7 @@
     <!-- Page Header Start -->
     <div class="container-fluid page-header py-5 wow fadeIn" data-wow-delay="0.1s">
         <div class="container text-center py-5">
-            <h1 class="display-2 text-dark mb-4 animated slideInDown">Products</h1>
+            <h1 class="display-2 text-dark mb-4 animated slideInDown">Commander</h1>
             <nav aria-label="breadcrumb animated slideInDown">
                 <ol class="breadcrumb justify-content-center mb-0">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -97,65 +97,49 @@
     <!-- Page Header End -->
 
 
-    
- <!-- products -->
-<div class="product-section mt-150 mb-150">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <input type="text" class="form-control" placeholder="Search by Name" id="searchName">
-            </div>
-            <div class="col">
-                <input type="text" class="form-control" placeholder="Search by Price" id="searchPrice">
-            </div>
+{% block com %}
+<!-- Form Section Start -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow">
+                <div class="card-body p-5">
+                    <h2 class="card-title text-center mb-4">Commande Form</h2>
+{{ form_start(form, {'attr': {'class': 'my-form-class', 'novalidate': 'novalidate'}}) }}
+
+        <div class="mb-3">
+            {{ form_label(form.datecmd, 'Date Commande', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.datecmd, {'attr': {'class': 'form-control', 'placeholder': 'Select Date'}}) }}
+            {{ form_errors(form.datecmd) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.lieucmd, 'Lieucmd', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.lieucmd, {'attr': {'class': 'form-control', 'placeholder': 'Enter Lieucmd'}}) }}
+            {{ form_errors(form.lieucmd) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.quantite, 'Quantite', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.quantite, {'attr': {'class': 'form-control', 'placeholder': 'Enter Quantite'}}) }}
+            {{ form_errors(form.quantite) }}
         </div>
 
-        <div class="row product-lists">
-            {% for p in produits %}
-            <div class="col-lg-4 col-md-6 text-center strawberry">
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <img src="{{ asset('front/img/' ~ p.image) }}" alt="{{ p.nomp }}">
+        <!-- Display the selected product name -->
+        <div class="mb-3">
+            <label class="form-label">Product</label>
+            <input type="text" class="form-control" value="{{ selectedProduit.nomp }}" readonly>
+        </div>
+
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+        </div>
+        {{ form_end(form) }}
                     </div>
-                    <h3>{{ p.nomp }}</h3>
-                    <p class="product-price"><span>{{ p.prix }} TND</span></p>
-                    <p class="product-statut"><span>{{ p.descp }}</span></p>
-                    <a href="{{ path('app_commande_new', {'id': p.id}) }}" class="boxed-btn black">Commander</a>
-                </div>
             </div>
-            {% endfor %}
         </div>
     </div>
 </div>
-<!-- end products -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        function searchProducts() {
-            var name = $('#searchName').val().toLowerCase();
-            var price = $('#searchPrice').val().toLowerCase();
-
-            $('.product-lists .single-product-item').each(function () {
-                var productName = $(this).find('h3').text().toLowerCase();
-                var productPrice = $(this).find('.product-price span').text().toLowerCase();
-
-                var nameMatch = productName.includes(name);
-                var priceMatch = productPrice.includes(price);
-
-                if (nameMatch && priceMatch) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        }
-
-        $('#searchName, #searchPrice').on('keyup', function () {
-            searchProducts();
-        });
-    });
-</script>
-
+{% endblock %}
+   
 
 
 

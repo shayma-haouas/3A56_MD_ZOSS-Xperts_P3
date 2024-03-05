@@ -33,7 +33,7 @@ class ProduitController extends AbstractController
             $entityManager->persist($produit);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_produit_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_back', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('back/add.html.twig', [

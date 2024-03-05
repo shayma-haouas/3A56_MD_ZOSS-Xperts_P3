@@ -28,11 +28,13 @@ class Commande
     #[ORM\Column]
     private ?int $quantite = null;
 
-    #[ORM\ManyToOne(inversedBy: 'commandes')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'commandes')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'commande', targetEntity: Produit::class)]
-    private Collection $produits;
+    #[ORM\ManyToOne(targetEntity: Produit::class, inversedBy: 'commandes')]
+    #[ORM\JoinColumn(name: 'produit_id', referencedColumnName: 'id')]
+    private ?Produit $produit = null;
 
     public function __construct()
     {
@@ -104,38 +106,22 @@ class Commande
         return $this;
     }
 
-    /**
-     * @return Collection<int, Produit>
-     */
-    public function getProduits(): Collection
+
+    public function getProduit(): ?Produit
     {
-        return $this->produits;
+        return $this->produit;
     }
 
-    public function addProduit(Produit $produit): static
+    public function setProduit(?Produit $produit): self
     {
-        if (!$this->produits->contains($produit)) {
-            $this->produits->add($produit);
-            $produit->setCommande($this);
-        }
+        $this->produit = $produit;
 
         return $this;
     }
-
-    public function removeProduit(Produit $produit): static
-    {
-        if ($this->produits->removeElement($produit)) {
-            // set the owning side to null (unless already changed)
-            if ($produit->getCommande() === $this) {
-                $produit->setCommande(null);
-            }
-        }
-
-        return $this;
-    }
-    public function __toString(): string
-    {
-        // Customize the string representation of the Commande object here
-        return (string) $this->id; // Assuming 'id' is a property of the Commande class
-    }
+    // public function __toString(): string
+    // {
+    //     // Customize the string representation of the Commande object here
+    //     return (string) $this->id; // Assuming 'id' is a property of the Commande class
+    // }
 }
+
