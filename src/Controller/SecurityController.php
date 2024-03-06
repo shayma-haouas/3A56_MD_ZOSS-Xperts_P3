@@ -84,15 +84,16 @@ class SecurityController extends AbstractController
             $url = $this->generateUrl('app_reset_password',array('token'=>$token),UrlGeneratorInterface::ABSOLUTE_URL);
 
             //BUNDLE MAILER
+           
             $message = (new Swift_Message('Mot de password oublié'))
                 ->setFrom('siwarachour999@gmail.com')
                 ->setTo($user->getEmail())
-                ->setBody("<p> Bonjour</p> unde demande de réinitialisation de mot de passe a été effectuée. Veuillez cliquer sur le lien suivant :".$url,
+                ->setBody("<p> Bonjour {$user->getName()}, </p> unde demande de réinitialisation de mot de passe a été effectuée. Veuillez cliquer sur le lien suivant :".$url,
                 "text/html");
 
             //send mail
             $mailer->send($message);
-            $this->addFlash('message','E-mail  de réinitialisation du mp envoyé :');
+            $this->addFlash('message','E-mail  de réinitialisation  du mot de passe envoyé.:');
         //    return $this->redirectToRoute("app_login");
 
 

@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,25 +17,36 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
-{
-    #[Route('/user', name: 'app_user')]
-    public function index(UserRepository $userRepository,PaginatorInterface $paginator, Request $request): Response
+{#[Route('/user', name: 'app_user')]
+    public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        // Récupérez l'utilisateur connecté
+        $user = $this->getUser();
+    
+        // Récupérez le terme de recherche à partir de la requête
+        $searchTerm = $request->query->get('term');
+    
+        // Si un terme de recherche est fourni, effectuez la recherche
+        if ($searchTerm) {
+            // Effectuez votre logique de recherche ici
+            // Par exemple, utilisez la méthode de recherche de votre repository
+            $searchResults = $this->getDoctrine()->getRepository(User::class)->search($searchTerm);
+    
+            // Retournez les résultats de la recherche au format JSON
+            return new JsonResponse($searchResults);
+        }
+    
+        // Si aucun terme de recherche n'est fourni, affichez la liste des utilisateurs normalement
         // Utiliser dump() pour afficher les données des utilisateurs dans le terminal
         dump($userRepository->findAll());
-         // Récupérez l'utilisateur connecté
-         $user = $this->getUser();
-
-
+    
         // Passer les données des utilisateurs à la vue
         return $this->render('user/base.html.twig', [
             'user' => $user,
             'users' => $userRepository->findAll(),
         ]);
-     
-   
-
     }
+    
 
 
     #[Route('/user/{id}', name: 'app_user_show')]
