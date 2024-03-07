@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code</title>
+</head>
+<body>
+    <h1>QR Code</h1>
+    <?php
+    // Inclure le service QrcodeService
+    require_once 'chemin/vers/QrcodeService.php';
+
+    // Instancier le service QrcodeService
+    $qrcodeService = new App\Services\QrcodeService(/* passer les dépendances nécessaires ici */);
+
+    // Générer un code QR avec une requête spécifique
+    $query = 'votre_requete';
+    $dataUri = $qrcodeService->qrcode($query);
+
+    // Afficher l'image du code QR
+    echo '<img src="' . $dataUri . '" alt="QR Code">';
+    ?>
+</body>
+</html>

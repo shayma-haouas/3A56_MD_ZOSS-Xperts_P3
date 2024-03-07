@@ -1,0 +1,24 @@
+{% extends 'sign/signup.html.twig' %}
+
+{% block signup %}
+
+<div class="example-wrapper">
+    <h1>Symfony QR-Code ✅</h1> <hr>
+
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_start(form) }}
+                {{ form_row(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Recherche'}}) }}
+                <hr>
+                <button type="submit" class="btn btn-success btn-block" href="image.html.twig">Recherche</button>
+            {{ form_end(form) }}
+        </div>
+        <div class="col-md-6">
+            {% if qrCode %}
+                <img src="{{ qrCode }}" alt="qr-code">
+            {% endif %}
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

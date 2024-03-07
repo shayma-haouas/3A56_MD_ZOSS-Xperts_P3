@@ -14,6 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use VictorPrdh\RecaptchaBundle\Form\ReCaptchaType;
 
 class RegistrationFormType extends AbstractType
 {
@@ -56,22 +57,7 @@ class RegistrationFormType extends AbstractType
                     new Assert\NotBlank(),
                 ],
             ])
-            ->add('roles', ChoiceType::class, [
-                'label' => 'Choose your role',
-                'choices' => [
-                
-                    'Client' => 'ROLE_CLIENT',
-                    'Fournisseur' => 'ROLE_FOURNISSEUR',
-                ],
-                'multiple' => true,
-                'required' => true,
-                'constraints' => [
-                    new Assert\NotBlank(),
-                ],'attr' => ['class' => 'form-control'],
-                
-                'placeholder' => false, //
             
-            ])
             ->add('image',FileType::class,['data_class' => NULL, "required" => false, 'constraints' => [
                 new File([
                     'maxSize' => '9000k',
@@ -102,6 +88,10 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ]);
+           
+           
+
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

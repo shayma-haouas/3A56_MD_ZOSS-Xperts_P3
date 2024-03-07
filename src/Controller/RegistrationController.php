@@ -31,9 +31,13 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, SluggerInterface $slugger, UserAuthenticatorInterface $userAuthenticator, AppAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
+        
+        // Définir le rôle par défaut comme "Client"
+        $user->setRoles(['ROLE_CLIENT']);
+
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -47,49 +51,15 @@ class RegistrationController extends AbstractController
             );
 
             // Process the uploaded file if it exists
-            $brochureFile = $form->get('image')->getData();
-            if ($brochureFile instanceof UploadedFile) {
-                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
-                // Sanitize the filename to ensure safe URL usage
-                $safeFilename = $slugger->slug($originalFilename);
-                // Generate a unique filename to prevent conflicts
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $brochureFile->guessExtension();
-
-                // Move the uploaded file to the desired directory
-                try {
-                    $brochureFile->move(
-                        $this->getParameter('Evenement_directory'),
-                        $newFilename
-                    );
-                    // Set the filename in your entity
-                    $user->setImage($newFilename);
-                } catch (FileException $e) {
-                    // Handle any exceptions that occur during file upload
-                    // For example, you could log the error or show a flash message
-                    // and redirect the user back to the form
-                    // You can add your error handling code here
-                }
-            }
+            // Votre code existant...
 
             $entityManager->persist($user);
             $entityManager->flush();
 
             // Generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('siwar.achour@esprit.tn', 'siwar'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
+            // Votre code existant...
 
-            // Authenticate the user after registration
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-                // Change this line to specify the redirection route after authentication
-            );
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('registration/register.html.twig', [
