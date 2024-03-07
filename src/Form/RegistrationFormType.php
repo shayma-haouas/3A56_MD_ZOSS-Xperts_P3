@@ -34,14 +34,7 @@ class RegistrationFormType extends AbstractType
                 ],
                 'required' => true,
             ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new Assert\IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
+            
             ->add('name', TextType::class, [
                 'constraints' => [
                     new Assert\NotBlank(),
@@ -87,7 +80,8 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ]);
+            ])
+            ->add('captcha',ReCaptchaType::class);
            
            
 

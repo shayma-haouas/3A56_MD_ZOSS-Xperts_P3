@@ -10,6 +10,12 @@
             {{ form_start(form) }}
                 {{ form_row(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Recherche'}}) }}
                 <hr>
+                            {{ form_start(form) }}
+                {{ form_row(form.firstname, {'attr': {'class': 'form-control', 'placeholder': 'FirstName'}}) }}
+                <hr>
+                            {{ form_start(form) }}
+                {{ form_row(form.lastname, {'attr': {'class': 'form-control', 'placeholder': 'LastName'}}) }}
+                <hr>
                 <button type="submit" class="btn btn-success btn-block" href="image.html.twig">Recherche</button>
             {{ form_end(form) }}
         </div>

@@ -25,7 +25,6 @@ class UpdateprofileType extends AbstractType
             'required' => false,
         ])
             ->add('email')
-            ->add('number')
             ->add('datenaissance', BirthdayType::class, [
                 'label' => 'Date de Naissance',
                 'placeholder' => [
@@ -33,18 +32,11 @@ class UpdateprofileType extends AbstractType
                 ],
                 'required' => true,
             ])
+            ->add('number')
+            
             ->add('password', PasswordType::class)
           
-            ->add('roles', ChoiceType::class, [
-                'choices' => [
-                    'User' => 'ROLE_USER',
-                    'Fournisseur' => 'ROLE_FOURNISSEUR',
-                    'Client' => 'ROLE_CLIENT',
-                ],
-                'multiple' => true,
-                'expanded' => true, // Pour afficher les cases à cocher
-                'required' => true,
-            ]);
+          
         ;
     }
 

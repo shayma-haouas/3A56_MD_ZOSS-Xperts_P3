@@ -23,8 +23,9 @@ class QrCodeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $qrCode = $qrcodeService->qrcode($data['email']);
-            
+            $query = $data['email'] . ' ' . $data['firstname'] . ' ' . $data['lastname'];
+            $qrCode = $qrcodeService->qrcode($query);
+ 
         }
 
         return $this->render('qr_code/index.html.twig', [

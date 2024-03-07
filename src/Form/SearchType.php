@@ -12,7 +12,8 @@ class SearchType extends AbstractType
     {
         $builder
             ->add('email')
-        ;
+            ->add('firstname')
+            ->add('lastname')            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -36,7 +36,7 @@ class QrcodeService
             ->data($url . $query)
             ->encoding(new Encoding('UTF-8'))
 
-            ->size(400)
+            ->size(190)
             ->margin(10)
             ->labelText($dateString)
 
