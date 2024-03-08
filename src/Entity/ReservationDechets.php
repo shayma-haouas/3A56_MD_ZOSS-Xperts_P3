@@ -31,7 +31,7 @@ class ReservationDechets
     
    
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-   // #[Assert\Date]
+    //#[Assert\Date]
     #[Assert\NotBlank]
     private ?\DateTimeInterface $date_ramassage = null;
    
@@ -48,9 +48,14 @@ class ReservationDechets
 
   
     #[ORM\Column]
-    #[Assert\Type('integer')]
-    #[Assert\Length(min: 10, max: 10)]
-    private ?int $numero_tell = null;
+    #[Assert\NotBlank(message: "Le numéro de téléphone ne peut pas être vide.")]
+    #[Assert\Type(type: 'numeric', message: "Le numéro de téléphone doit être un nombre.")]
+    #[Assert\Length(
+        min: 10, 
+        max: 10, 
+        exactMessage: "Le numéro de téléphone doit comporter exactement 10 chiffres."
+    )]
+    private ?string $numero_tell = null;    
 
     #[ORM\ManyToOne(inversedBy: 'reservationDechets')]
     private ?User $User = null;

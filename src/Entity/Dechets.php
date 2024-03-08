@@ -41,6 +41,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     
         #[ORM\ManyToOne(inversedBy: 'dechets')]
         private ?ReservationDechets $ReservationDechets = null;
+
+        #[ORM\Column(length: 255)]
+        private ?string $image = null;
     
         // ...
     
@@ -113,6 +116,18 @@ use Symfony\Component\Validator\Constraints as Assert;
     public function setReservationDechets(?ReservationDechets $ReservationDechets): static
     {
         $this->ReservationDechets = $ReservationDechets;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

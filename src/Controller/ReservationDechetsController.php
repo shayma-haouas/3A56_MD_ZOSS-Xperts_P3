@@ -10,17 +10,32 @@
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\HttpFoundation\Response;
     use Symfony\Component\Routing\Annotation\Route;
+    use Knp\Component\Pager\PaginatorInterface;
 
     #[Route('/reservation/dechets')]
     class ReservationDechetsController extends AbstractController
     {
         #[Route('/', name: 'app_reservation_dechets_index', methods: ['GET'])]
-        public function index(ReservationDechetsRepository $reservationDechetsRepository): Response
+        public function index(ReservationDechetsRepository $reservationDechetsRepository,PaginatorInterface $paginator,Request $request): Response
         {
             
+            
+        
+        
+        $queryBuilder = $reservationDechetsRepository->createQueryBuilder('r')
+        ->orderBy('r.id', 'DESC');
+
+    // Get the paginated results
+        $reservationDechets = $paginator->paginate(
+        $queryBuilder->getQuery(), // Pass the query to paginate
+        $request->query->getInt('page', 1), // Current page number, default is 1
+        5 // Number of items per page
+    );          
+
+
+
             return $this->render('front/list_reservation.html.twig', [
-                'reservation_dechets' => $reservationDechetsRepository->findAll(),
-                
+                'reservation_dechets' => $reservationDechets,
             
             ]);
         }

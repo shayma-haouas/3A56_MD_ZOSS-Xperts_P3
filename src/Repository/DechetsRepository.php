@@ -19,6 +19,13 @@ class DechetsRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Dechets::class);
+    }  public function findBySearchQuery($searchQuery)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.type LIKE :query')
+            ->setParameter('query', '%' . $searchQuery . '%')
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**
@@ -45,4 +52,30 @@ class DechetsRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+public function countByType()
+{
+    $qb = $this->createQueryBuilder('p')
+        ->select('p.type, COUNT(p.id) AS typeCount')
+        ->groupBy('p.type');
+
+    return $qb->getQuery()->getResult();
+}
+
+public function triecroissant()
+    {
+        return $this->createQueryBuilder('r')
+            ->orderBy('r.quantite', 'ASC')
+
+            ->getQuery()
+            ->getResult();
+
+    }
+    public function triedecroissant()
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.quantite','DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -34,26 +34,31 @@
   
   <div class="form-group mb-3">
     {{ form_label(form.quantite, 'Quantité', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_errors(form.quantite) }}
     {{ form_widget(form.quantite, {'attr': {'class': 'form-control', 'placeholder': 'Quantité'}}) }}
   </div>
   
   <div class="form-group mb-3">
     {{ form_label(form.date, 'Date', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_errors(form.date) }}
     {{ form_widget(form.date, {'attr': {'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}}) }}
   </div>
   
   <div class="form-group mb-3">
     {{ form_label(form.date_ramassage, 'Date de Ramassage', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_errors(form.date_ramassage) }}
     {{ form_widget(form.date_ramassage, {'attr': {'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}}) }}
   </div>
   
   <div class="form-group mb-3">
     {{ form_label(form.nom_fournisseur, 'Nom du Fournisseur', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_errors(form.nom_fournisseur) }}
     {{ form_widget(form.nom_fournisseur, {'attr': {'class': 'form-control', 'placeholder': 'Nom du Fournisseur'}}) }}
   </div>
   
   <div class="form-group mb-4">
     {{ form_label(form.numero_tell, 'Numéro de Téléphone', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_errors(form.numero_tell) }}
     {{ form_widget(form.numero_tell, {'attr': {'class': 'form-control', 'placeholder': 'Numéro de Téléphone'}}) }}
   </div>
   
@@ -63,6 +68,7 @@
   
   {{ form_end(form) }}
 </div>
+
 
 
 <!-- Contact Start -->
