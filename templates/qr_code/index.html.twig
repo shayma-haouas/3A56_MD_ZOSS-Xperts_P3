@@ -1,22 +1,61 @@
 {% extends 'sign/signup.html.twig' %}
 
 {% block signup %}
+<style>
+    /* Styles CSS personnalisés */
+    .example-wrapper {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .title {
+        text-align: center;
+        color: #433e5b;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .btn-primary {
+        background-color: #70952b;
+        border-color: #70952b;
+        font-weight: bold;
+    }
+
+    img {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
 
 <div class="example-wrapper">
-    <h1>Symfony QR-Code ✅</h1> <hr>
+    <h1 class="title">Now You Can Genarate Your Code</h1>
+    <hr>
 
     <div class="row">
         <div class="col-md-6">
             {{ form_start(form) }}
-                {{ form_row(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Recherche'}}) }}
+                <div class="form-group">
+                    {{ form_row(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Recherche'}}) }}
+                </div>
                 <hr>
-                            {{ form_start(form) }}
-                {{ form_row(form.firstname, {'attr': {'class': 'form-control', 'placeholder': 'FirstName'}}) }}
+                <div class="form-group">
+                    {{ form_row(form.firstname, {'attr': {'class': 'form-control', 'placeholder': 'FirstName'}}) }}
+                </div>
                 <hr>
-                            {{ form_start(form) }}
-                {{ form_row(form.lastname, {'attr': {'class': 'form-control', 'placeholder': 'LastName'}}) }}
+                <div class="form-group">
+                    {{ form_row(form.lastname, {'attr': {'class': 'form-control', 'placeholder': 'LastName'}}) }}
+                </div>
                 <hr>
-                <button type="submit" class="btn btn-success btn-block" href="image.html.twig">Recherche</button>
+                <button type="submit" class="btn btn-primary btn-block">Recherche</button>
             {{ form_end(form) }}
         </div>
         <div class="col-md-6">
@@ -24,7 +63,6 @@
                 <img src="{{ qrCode }}" alt="qr-code">
             {% endif %}
         </div>
-        
     </div>
 </div>
 {% endblock %}

@@ -126,6 +126,16 @@
                                                     <a href="{{ path('app_user_delete', {'id': user.id}) }}">Delete</a>
                                                     <a href="{{ path('app_user_update', {'id': user.id}) }}">Update</a>
                                                 </td>
+                                                <td>
+                                                    {% if user.isbanned %}
+                                                        <span class="badge badge-danger" style="color: black;">Banned</span>
+                                                    {% else %}
+                                                        <span class="badge badge-success" style="color: black;">Not Banned</span>
+                                                    {% endif %}
+                                                    <div>
+                                                      <a href="{{ path('ban_user', {'id': user.id}) }}" class="btn btn-danger">Ban / Unban</a>
+                                                   </div>
+                                                  </td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>

@@ -52,7 +52,7 @@ class RegistrationController extends AbstractController
 
             // Process the uploaded file if it exists
             // Votre code existant...
-
+            $user->setIsBanned(false);
             $entityManager->persist($user);
             $entityManager->flush();
 

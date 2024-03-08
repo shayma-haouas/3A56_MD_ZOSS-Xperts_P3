@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Controller;
-
+use PHPExcel;
+use PHPExcel_IOFactory;
 use App\Entity\User;
 use App\Form\UsernewType;
 use App\Form\UserType;
@@ -15,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
 class UserController extends AbstractController
 {#[Route('/user', name: 'app_user')]
@@ -167,7 +170,62 @@ class UserController extends AbstractController
         ]);
     }
     
-    
-    
+  #[Route('/banUser/{id}', name: 'ban_user', methods: ['GET', 'POST'])]
+  public function banUser(Request $request, UserRepository $userRepository,int $id): Response
+  {
+      // Retrieve the search query from the request
+      $user = $userRepository->find($id);
+
+      // Perform the search operation based on the query
+       $userRepository->banUnbanUser($user);
+
+      // Return the search results as JSON response
+      return $this->redirectToRoute('app_back');
+  }
+  #[Route('/export-users-to-excel', name: 'export_users_to_excel')]
+  public function exportUsersToExcelAction(UserRepository $userRepository): Response
+  {
+      // Récupérer les utilisateurs à exporter
+      $users = $userRepository->findAll();
+  
+      // Créer une nouvelle instance de Spreadsheet
+      $spreadsheet = new Spreadsheet();
+      $sheet = $spreadsheet->getActiveSheet();
+      $sheet->setTitle('Utilisateurs');
+  
+      // Entêtes de colonne
+      $sheet->setCellValue('A1', 'ID');
+      $sheet->setCellValue('B1', 'Nom');
+      $sheet->setCellValue('C1', 'Email');
+  
+      // Ajouter les données des utilisateurs
+      $row = 2;
+      foreach ($users as $user) {
+          $sheet->setCellValue('A'.$row, $user->getId());
+          $sheet->setCellValue('B'.$row, $user->getName());
+          $sheet->setCellValue('C'.$row, $user->getEmail());
+          $row++;
+      }
+  
+      // Ajuster la largeur des colonnes
+      foreach(range('A', 'C') as $columnID) {
+          $sheet->getColumnDimension($columnID)->setAutoSize(true);
+      }
+  
+      // Créer le writer pour le format Excel (Xls)
+      $writer = new Xls($spreadsheet);
+  
+      // Créer une réponse avec les headers appropriés pour le téléchargement
+      $response = new Response();
+      $response->headers->set('Content-Type', 'application/vnd.ms-excel');
+      $response->headers->set('Content-Disposition', 'attachment;filename="users.xls"');
+      $response->headers->set('Cache-Control', 'max-age=0');
+  
+      // Écrire le contenu du fichier Excel dans la réponse
+      $writer->save('php://output');
+  
+      return $response;
+  }
+  
 
 }

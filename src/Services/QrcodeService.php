@@ -44,7 +44,7 @@ class QrcodeService
             ->logoPath($path . 'img/logo.png')
             ->logoResizeToWidth('100')
             ->logoResizeToHeight('100')
-            ->backgroundColor(new Color(221, 158, 3))
+            ->backgroundColor(new Color(221, 1, 3))
             ->build();
 
         // Générer un nom de fichier unique
